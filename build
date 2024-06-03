@@ -1,0 +1,44 @@
+#!/bin/bash
+
+ARG=("${@}")
+
+NO_CACHE=false
+USE_SSL=false
+
+
+for i in "${ARG[@]}"; do
+  if [ "$i" = "--no-cache" ]; then
+    NO_CACHE=true
+
+  elif [ "$i" = "--ssl" ]; then
+    USE_SSL=true
+
+  elif [ "$i" = "--help" ]; then
+    echo -e "lkt-php83-apache build help"
+    echo -e ""
+    echo -e "Options:"
+    echo -e "    --ssl            Includes SSL config"
+    echo -e "    --no-cache       Prevents docker build with previous cache"
+    exit 0
+  else
+    break
+  fi
+done
+
+if [ "$USE_SSL" = true  ]; then
+  if [ "$NO_CACHE" = true  ]; then
+    echo -e "Generating image: lkt-php83-apache-ssl, without cache"
+    docker build --no-cache -t lkt-php83-apache-ssl:latest ssl
+  else
+    echo -e "Generating image: lkt-php83-apache-ssl, with cache"
+    docker build -t lkt-php83-apache-ssl:latest ssl
+  fi
+else
+  if [ "$NO_CACHE" = true  ]; then
+    echo -e "Generating image: lkt-php83-apache, without cache"
+    docker build --no-cache -t lkt-php83-apache:latest .
+  else
+    echo -e "Generating image: lkt-php83-apache, with cache"
+    docker build -t lkt-php83-apache:latest .
+  fi
+fi
