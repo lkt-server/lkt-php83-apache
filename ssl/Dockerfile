@@ -58,6 +58,12 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
+# Configure php.ini
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Increment upload_max_filesize to 20M
+RUN sed -i "s~upload_max_filesize = 2M~upload_max_filesize = 20M~g" "$PHP_INI_DIR/php.ini"
+
 # Configure SSL
 RUN mkdir -p /etc/apache2/ssl
 COPY certs/*.pem /etc/apache2/ssl/

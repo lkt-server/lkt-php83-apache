@@ -58,5 +58,11 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
+# Configure php.ini
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Increment upload_max_filesize to 20M
+RUN sed -i "s~upload_max_filesize = 2M~upload_max_filesize = 20M~g" "$PHP_INI_DIR/php.ini"
+
 # Generates server info files
 RUN echo "<?php phpinfo(); ?>" > /var/www/html/info.php && php -m > /var/www/html/php1.html

@@ -14,6 +14,7 @@ A pre-configured docker file, so you can have an apache php 8.3 server working i
 - Imagick
 - Composer
 - Optional SSL config
+- Upload Max Filesize increased to 20M
 
 ## Installation
 Simply clone this repo.
